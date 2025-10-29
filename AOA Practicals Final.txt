@@ -1,0 +1,294 @@
+//Insertion Sort
+
+
+#include<stdio.h>
+#include<conio.h>
+
+void main(){
+    int i,j,key,n;
+    int a[6] = {12,3,45,5,6,1};
+    n = 6;
+    clrscr();
+    printf("BEfore : ");
+    for(i = 0; i <n ; i++){
+        printf("%d\t",a[i]);
+    }
+    for(i = 1; i<n ; i++){
+        key = a[i];
+        j = i - 1;
+        while(j >= 0 &&a[j] > key){
+            a[j + 1] = a[j];
+            j--;
+        }
+        a[j + 1] = key;
+    }
+    printf("\nAfter : ");
+    for(i = 0 ;i < n ; i++){
+    printf("%d\t",a[i]);
+    }
+    getch();
+}
+
+
+
+
+//Selection Sort
+
+
+#include<stdio.h>
+#include<conio.h>
+void main(){
+    int i,j,n,min,t;
+    int a[6] = {12,3,45,5,6,1};
+    n = 6;
+    clrscr();
+    printf("Before : ");
+    or(i = 0; i < n ; i++){
+        printf("%d\t",a[i]);
+    }
+    for (i = 0; i <n ; i++){
+        min = i ;
+        for(j =i + 1; j < n;j++){
+            if(a[j] < a[min]){
+                min = j;
+            }
+        }
+        t = a[i];
+        a[i] = a[min];
+        a[min] = t;
+    }
+    printf("\nAfter : ");
+    for(i=0;i<n;i++){
+        printf("%d\t",a[i]);
+    }
+    getch();
+}
+
+
+//Binary Search
+
+
+#include <stdio.h>
+#include<conio.h>
+
+int BS(int a[],int l,int u,int key){
+    int mid;
+    if(l > u){
+        return -1;
+    }
+    mid = (u + l)/2;
+    if(a[mid] == key){
+        return mid;
+    }else if(a[mid] > key){
+        return BS(a,l,mid-1,key);
+    }else{
+        return BS(a,mid+1,u,key);
+    }
+}
+
+void main(){
+    int i,l,u,res,key;
+    int n = 6;
+    int a[6] = {1,2,3,4,5,6};
+    l = 0 ;
+    u = n-1;
+    clrscr();
+    printf("Enter Element to find :");
+    scanf("%d",&key);
+    res = BS(a,l,u,key);
+    if(res == -1 ){
+        printf("Not Found");
+    }else{
+        printf("%d found at %d",key,res);
+    }
+    getch();
+}
+
+
+//Knapsack
+
+
+
+#include <stdio.h>
+#include <conio.h>
+void ks(int weights[],int values[],int n,int cap){
+    float ratio[20],totalv= 0.0;
+    int i,j,k,temp;
+    float t;
+
+    for (i = 0 ;i < n;i++){
+	ratio[i] = (float) values[i]/weights[i];
+    }
+
+    for (i = 0 ; i < n ; i++){
+	    for (j = i + 1 ; j < n ; j++){
+		if (ratio[i] < ratio[j]){
+		t =ratio[i];
+		ratio[i] = ratio[j];
+		ratio[j] = t;
+
+		temp =values[i];
+		values[i] = values[j];
+		values[j] = temp;
+
+		temp =weights[i];
+		weights[i] = weights[j];
+		weights[j] = temp;
+		}
+	}
+    }
+    for (i = 0 ; i < n ;i++){
+	if (cap == 0){
+	    break;
+	}
+	else if (weights[i] <= cap){
+	    totalv += values[i];
+	    cap -= weights[i];
+	}else{
+	    totalv += values[i] * ((float) cap/weights[i]);
+	    cap = 0;
+	}
+    }
+    printf("Max profit is : % .2f",totalv);
+}
+void main (){
+    int n = 3;
+    int values[3] = {60,100,120};
+    int weights[3] = {10,20,30};
+    int cap = 50;
+    clrscr();
+    ks(weights,values,n,cap);
+    getch();
+}
+
+//Floyd-Warshal
+
+
+
+#include <stdio.h>
+#include<conio.h>
+#define INF 999
+#define MAX 50
+
+void fw(int graph[MAX][MAX],int v){
+    int dist[MAX][MAX];
+    int i,j,k;
+    
+    for(i = 0; i < v ; i++){
+        for(j = 0;j < v ; j++){
+            dist[i][j] = graph[i][j];
+        }
+    }
+    
+    for (i = 0;i < v ; i++){
+        for (j = 0 ; j < v ; j++){
+            for(k = 0; k < v ;k++ ){
+                if(dist[i][k] + dist[k][j] < dist[i][j]){
+                    dist[i][j] = dist[i][k] + dist[k][j];
+                }
+            }
+        }
+    }
+    for(i = 0 ;i < v ; i++){
+        for(j = 0;j < v ; j++){
+            if(dist[i][j] == INF){
+                printf("INF\t");
+            }else{
+                printf("%d\t",dist[i][j]);
+            }
+        }
+        printf("\n");
+    }
+}
+
+void main(){
+    int v = 4;
+    int graph[MAX][MAX] = {
+        {0,5,INF,10},
+        {INF,0,3,INF},
+        {INF,INF,0,1},
+        {INF,INF,INF,0}
+    };
+    clrscr();
+    printf("FLoyd Warshall\n");
+    fw(graph,v);
+    getch();
+}
+
+
+
+//Sum of Subset
+
+
+#include <stdio.h>
+#include<conio.h>
+
+void psubset(int subset[],int size){
+    int i;
+    printf("{");
+    for(i = 0 ; i < size; i++){
+        printf(" %d ",subset[i]);
+    }
+    printf("}\n");
+    
+}
+
+void SSB(int set[],int n, int subset[], int subsetsize,int currentsum ,int tsum, int index){
+    if (currentsum == tsum){
+        psubset(subset,subsetsize);
+        return;
+    }
+    if( currentsum > tsum || index == n){
+        return;
+    }
+    subset[subsetsize] = set[index];
+    SSB(set,n,subset,subsetsize+1,currentsum + set[index],tsum,index + 1);
+    SSB(set,n,subset,subsetsize,currentsum ,tsum,index + 1);
+    
+}
+
+void main(){
+    int set[] = {2,3,5,6,8,10};
+    int n = 6;
+    int tsum = 10;
+    int subset[6];
+    clrscr();
+    printf("Subset with Sum %d is :\n",tsum);
+    SSB(set, n, subset, 0, 0,tsum, 0);  //SSB(set, n, subset, subsetsize, currentsum,tsum, index);
+    getch();
+}
+
+
+//NSMA
+
+
+
+#include <stdio.h>
+#include <string.h>
+#include <conio.h>
+
+void NSMA(char pat[],char txt[]){
+    int M = strlen(pat);
+    int N = strlen(txt);
+    int i,j;
+    
+    for (i = 0;i <= N-M;i++){
+        for (j = 0; j < M ; j++){
+            if(txt[i+j] != pat[j]){
+                break;  //inner loop breaks control send back to i
+            }
+        }
+        if (j == M){
+        printf("Patter found at %d \n",i);
+        }
+    }
+}
+
+void main(){
+    char txt[100] = "ABABDABACDABABCABAB";
+    char pat[100] = "ABA";
+    clrscr();
+    printf("Solving\n");
+    NSMA(pat,txt);
+    getch();
+}
