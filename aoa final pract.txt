@@ -1,0 +1,388 @@
+#include <stdio.h>
+#include <conio.h>
+
+void insertionSort(int arr[], int n) {
+    int i, key, j;
+    for (i = 1; i < n; i++) {
+        key = arr[i];
+        j = i - 1;
+        
+        while (j >= 0 && arr[j] > key) {
+            arr[j + 1] = arr[j];
+            j = j - 1;
+        }
+        arr[j + 1] = key;
+    }
+}
+
+void main() {
+    int arr[] = {64, 34, 25, 12, 22, 11, 90};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    int i;
+    
+    clrscr();
+    
+    printf("Original array: ");
+    for (i = 0; i < n; i++)
+        printf("%d ", arr[i]);
+    
+    insertionSort(arr, n);
+    
+    printf("\nSorted array: ");
+    for (i = 0; i < n; i++)
+        printf("%d ", arr[i]);
+    
+    getch();
+}
+
+
+#include <stdio.h>
+#include <conio.h>
+
+void selectionSort(int arr[], int n) {
+    int i, j, min, temp;
+    for (i = 0; i < n-1; i++) {
+        min = i;
+        for (j = i+1; j < n; j++) {
+            if (arr[j] < arr[min])
+                min = j;
+        }
+        temp = arr[min];
+        arr[min] = arr[i];
+        arr[i] = temp;
+    }
+}
+
+void main() {
+    int arr[] = {64, 25, 12, 22, 11};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    int i;
+    
+    clrscr();
+    
+    printf("Original array: ");
+    for (i = 0; i < n; i++)
+        printf("%d ", arr[i]);
+    
+    selectionSort(arr, n);
+    
+    printf("\nSorted array: ");
+    for (i = 0; i < n; i++)
+        printf("%d ", arr[i]);
+    
+    getch();
+}
+
+#include <stdio.h>
+#include <conio.h>
+
+int binarySearch(int arr[], int n, int key) {
+    int low = 0, high = n - 1, mid;
+    
+    while (low <= high) {
+        mid = (low + high) / 2;
+        
+        if (arr[mid] == key)
+            return mid;
+        else if (arr[mid] < key)
+            low = mid + 1;
+        else
+            high = mid - 1;
+    }
+    return -1;
+}
+
+void main() {
+    int arr[] = {2, 5, 8, 12, 16, 23, 38, 56, 72, 91};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    int key, result;
+    
+    clrscr();
+    
+    printf("Array: ");
+    printf("2 5 8 12 16 23 38 56 72 91\n");
+    
+    printf("\nEnter number to search: ");
+    scanf("%d", &key);
+    
+    result = binarySearch(arr, n, key);
+    
+    if (result != -1)
+        printf("\nElement found at index %d", result);
+    else
+        printf("\nElement not found");
+    
+    getch();
+}
+
+#include <stdio.h>
+#include <conio.h>
+
+void knapsack(int n, float weight[], float profit[], float capacity) {
+    float x[10], tp = 0;
+    int i, j;
+    float u = capacity;
+    float ratio[10], temp;
+    
+    for (i = 0; i < n; i++) {
+        ratio[i] = profit[i] / weight[i];
+        x[i] = 0.0;
+    }
+    
+    /* Sort by profit/weight ratio */
+    for (i = 0; i < n; i++) {
+        for (j = i + 1; j < n; j++) {
+            if (ratio[i] < ratio[j]) {
+                temp = ratio[j];
+                ratio[j] = ratio[i];
+                ratio[i] = temp;
+                
+                temp = weight[j];
+                weight[j] = weight[i];
+                weight[i] = temp;
+                
+                temp = profit[j];
+                profit[j] = profit[i];
+                profit[i] = temp;
+            }
+        }
+    }
+    
+    for (i = 0; i < n; i++) {
+        if (weight[i] <= u) {
+            x[i] = 1.0;
+            tp = tp + profit[i];
+            u = u - weight[i];
+        } else {
+            x[i] = u / weight[i];
+            tp = tp + (x[i] * profit[i]);
+            break;
+        }
+    }
+    
+    printf("\nMaximum profit: %.2f", tp);
+}
+
+void main() {
+    float weight[10], profit[10], capacity;
+    int n, i;
+    
+    clrscr();
+    
+    printf("Enter number of items: ");
+    scanf("%d", &n);
+    
+    printf("Enter capacity of knapsack: ");
+    scanf("%f", &capacity);
+    
+    for (i = 0; i < n; i++) {
+        printf("Enter weight and profit for item %d: ", i+1);
+        scanf("%f %f", &weight[i], &profit[i]);
+    }
+    
+    knapsack(n, weight, profit, capacity);
+    
+    getch();
+}
+```
+
+**Example:**
+```
+Enter number of items: 3
+Enter capacity of knapsack: 50
+Enter weight and profit for item 1: 10 60
+Enter weight and profit for item 2: 20 100
+Enter weight and profit for item 3: 30 120
+
+Maximum profit: 240.00
+
+#include <stdio.h>
+#include <conio.h>
+
+#define INF 9999
+#define MAX 10
+
+void floydWarshall(int graph[][MAX], int n) {
+    int dist[MAX][MAX];
+    int i, j, k;
+    
+    /* Initialize distance matrix */
+    for (i = 0; i < n; i++) {
+        for (j = 0; j < n; j++) {
+            dist[i][j] = graph[i][j];
+        }
+    }
+    
+    /* Floyd Warshall algorithm */
+    for (k = 0; k < n; k++) {
+        for (i = 0; i < n; i++) {
+            for (j = 0; j < n; j++) {
+                if (dist[i][k] + dist[k][j] < dist[i][j])
+                    dist[i][j] = dist[i][k] + dist[k][j];
+            }
+        }
+    }
+    
+    /* Print shortest distances */
+    printf("\nShortest distances between all pairs:\n");
+    for (i = 0; i < n; i++) {
+        for (j = 0; j < n; j++) {
+            if (dist[i][j] == INF)
+                printf("INF\t");
+            else
+                printf("%d\t", dist[i][j]);
+        }
+        printf("\n");
+    }
+}
+
+void main() {
+    int graph[MAX][MAX];
+    int n, i, j;
+    
+    clrscr();
+    
+    printf("Enter number of vertices: ");
+    scanf("%d", &n);
+    
+    printf("\nEnter adjacency matrix (use %d for infinity):\n", INF);
+    for (i = 0; i < n; i++) {
+        for (j = 0; j < n; j++) {
+            scanf("%d", &graph[i][j]);
+        }
+    }
+    
+    floydWarshall(graph, n);
+    
+    getch();
+}
+```
+
+**Example Input:**
+```
+Enter number of vertices: 4
+
+Enter adjacency matrix (use 9999 for infinity):
+0 3 9999 7
+8 0 2 9999
+5 9999 0 1
+2 9999 9999 0
+```
+
+**Output:**
+```
+Shortest distances between all pairs:
+0    3    5    6
+5    0    2    3
+3    6    0    1
+2    5    7    0
+
+#include <stdio.h>
+#include <conio.h>
+
+int set[10], n, sum;
+
+void subset(int pos, int current, int remaining) {
+    int i;
+    
+    if (current == sum) {
+        printf("{ ");
+        for (i = 0; i < pos; i++)
+            printf("%d ", set[i]);
+        printf("}\n");
+        return;
+    }
+    
+    if (pos == n || current > sum || current + remaining < sum)
+        return;
+    
+    subset(pos + 1, current + set[pos], remaining - set[pos]);
+    subset(pos + 1, current, remaining - set[pos]);
+}
+
+void main() {
+    int i, total = 0;
+    
+    clrscr();
+    
+    printf("Enter number of elements: ");
+    scanf("%d", &n);
+    
+    printf("Enter elements: ");
+    for (i = 0; i < n; i++) {
+        scanf("%d", &set[i]);
+        total += set[i];
+    }
+    
+    printf("Enter target sum: ");
+    scanf("%d", &sum);
+    
+    printf("\nSubsets with sum %d:\n", sum);
+    subset(0, 0, total);
+    
+    getch();
+}
+```
+
+**Example:**
+```
+Enter number of elements: 5
+Enter elements: 1 2 3 4 5
+Enter target sum: 7
+
+Subsets with sum 7:
+{ 1 2 4 }
+{ 2 5 }
+{ 3 4 }
+
+#include <stdio.h>
+#include <conio.h>
+#include <string.h>
+
+void naiveSearch(char text[], char pattern[]) {
+    int n = strlen(text);
+    int m = strlen(pattern);
+    int i, j, found = 0;
+    
+    for (i = 0; i <= n - m; i++) {
+        for (j = 0; j < m; j++) {
+            if (text[i + j] != pattern[j])
+                break;
+        }
+        
+        if (j == m) {
+            printf("Pattern found at index %d\n", i);
+            found = 1;
+        }
+    }
+    
+    if (found == 0)
+        printf("Pattern not found\n");
+}
+
+void main() {
+    char text[100], pattern[50];
+    
+    clrscr();
+    
+    printf("Enter text: ");
+    gets(text);
+    
+    printf("Enter pattern: ");
+    gets(pattern);
+    
+    printf("\n");
+    naiveSearch(text, pattern);
+    
+    getch();
+}
+```
+
+**Example:**
+```
+Enter text: AABAACAADAABAABA
+Enter pattern: AABA
+
+Pattern found at index 0
+Pattern found at index 9
+Pattern found at index 12
